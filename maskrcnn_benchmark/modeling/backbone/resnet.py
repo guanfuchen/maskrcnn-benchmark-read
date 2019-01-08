@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 """
 Variant of the resnet module that takes cfg as an argument.
@@ -26,7 +27,7 @@ StageSpec = namedtuple(
     "StageSpec",
     [
         "index",  # Index of the stage, eg 1, 2, ..,. 5
-        "block_count",  # Numer of residual blocks in the stage
+        "block_count",  # Number of residual blocks in the stage
         "return_features",  # True => return the last feature map from this stage
     ],
 )
@@ -45,6 +46,7 @@ ResNet50StagesTo4 = tuple(
     for (i, c, r) in ((1, 3, False), (2, 4, False), (3, 6, True))
 )
 # ResNet-50-FPN (including all stages)
+# ResNet50
 ResNet50FPNStagesTo5 = tuple(
     StageSpec(index=i, block_count=c, return_features=r)
     for (i, c, r) in ((1, 3, True), (2, 4, True), (3, 6, True), (4, 3, True))
@@ -65,9 +67,9 @@ class ResNet(nn.Module):
         # self.cfg = cfg.clone()
 
         # Translate string names to implementations
-        stem_module = _STEM_MODULES[cfg.MODEL.RESNETS.STEM_FUNC]
-        stage_specs = _STAGE_SPECS[cfg.MODEL.BACKBONE.CONV_BODY]
-        transformation_module = _TRANSFORMATION_MODULES[cfg.MODEL.RESNETS.TRANS_FUNC]
+        stem_module = _STEM_MODULES[cfg.MODEL.RESNETS.STEM_FUNC]  # 主干包括Conv+BN+Pool
+        stage_specs = _STAGE_SPECS[cfg.MODEL.BACKBONE.CONV_BODY]  # ResNet stages
+        transformation_module = _TRANSFORMATION_MODULES[cfg.MODEL.RESNETS.TRANS_FUNC]  # BottleneckWithFixedBatchNorm
 
         # Construct the stem module
         self.stem = stem_module(cfg)
@@ -81,9 +83,9 @@ class ResNet(nn.Module):
         self.stages = []
         self.return_features = {}
         for stage_spec in stage_specs:
-            name = "layer" + str(stage_spec.index)
-            stage2_relative_factor = 2 ** (stage_spec.index - 1)
-            bottleneck_channels = stage2_bottleneck_channels * stage2_relative_factor
+            name = "layer" + str(stage_spec.index)  # layer1 layer2 layer3
+            stage2_relative_factor = 2 ** (stage_spec.index - 1)  # layer1为1 layer2为2 layer3为4
+            bottleneck_channels = stage2_bottleneck_channels * stage2_relative_factor  # bottleneck channels
             out_channels = stage2_out_channels * stage2_relative_factor
             module = _make_stage(
                 transformation_module,
@@ -101,6 +103,7 @@ class ResNet(nn.Module):
             self.return_features[name] = stage_spec.return_features
 
         # Optionally freeze (requires_grad=False) parts of the backbone
+        # freeze backbone
         self._freeze_backbone(cfg.MODEL.BACKBONE.FREEZE_CONV_BODY_AT)
 
     def _freeze_backbone(self, freeze_at):
@@ -273,6 +276,7 @@ class BottleneckWithFixedBatchNorm(nn.Module):
 
 
 class StemWithFixedBatchNorm(nn.Module):
+    # 固定BN的主干
     def __init__(self, cfg):
         super(StemWithFixedBatchNorm, self).__init__()
 

@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 import os
 
@@ -97,12 +98,12 @@ _C.MODEL.BACKBONE.OUT_CHANNELS = 256 * 4
 _C.MODEL.RPN = CN()
 _C.MODEL.RPN.USE_FPN = False
 # Base RPN anchor sizes given in absolute pixels w.r.t. the scaled network input
-_C.MODEL.RPN.ANCHOR_SIZES = (32, 64, 128, 256, 512)
+_C.MODEL.RPN.ANCHOR_SIZES = (32, 64, 128, 256, 512)  # base RPN anchor sizes
 # Stride of the feature map that RPN is attached.
 # For FPN, number of strides should match number of scales
 _C.MODEL.RPN.ANCHOR_STRIDE = (16,)
 # RPN anchor aspect ratios
-_C.MODEL.RPN.ASPECT_RATIOS = (0.5, 1.0, 2.0)
+_C.MODEL.RPN.ASPECT_RATIOS = (0.5, 1.0, 2.0)  # RPN aspect ratios
 # Remove RPN anchors that go outside the image by RPN_STRADDLE_THRESH pixels
 # Set to -1 or a large value, e.g. 100000, to disable pruning anchors
 _C.MODEL.RPN.STRADDLE_THRESH = 0
@@ -218,13 +219,14 @@ _C.MODEL.RESNETS.STRIDE_IN_1X1 = True
 # Residual transformation function
 _C.MODEL.RESNETS.TRANS_FUNC = "BottleneckWithFixedBatchNorm"
 # ResNet's stem function (conv1 and pool1)
+# ResNet的主干函数
 _C.MODEL.RESNETS.STEM_FUNC = "StemWithFixedBatchNorm"
 
 # Apply dilation in stage "res5"
 _C.MODEL.RESNETS.RES5_DILATION = 1
 
 _C.MODEL.RESNETS.RES2_OUT_CHANNELS = 256
-_C.MODEL.RESNETS.STEM_OUT_CHANNELS = 64
+_C.MODEL.RESNETS.STEM_OUT_CHANNELS = 64  # 主干输出通道
 
 # ---------------------------------------------------------------------------- #
 # Solver

@@ -41,6 +41,7 @@ class CombinedROIHeads(torch.nn.ModuleDict):
 def build_roi_heads(cfg):
     # individually create the heads, that will be combined together
     # afterwards
+    # roi heads
     roi_heads = []
     if not cfg.MODEL.RPN_ONLY:
         roi_heads.append(("box", build_roi_box_head(cfg)))

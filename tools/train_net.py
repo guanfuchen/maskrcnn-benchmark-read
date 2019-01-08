@@ -115,7 +115,7 @@ def main():
         help="path to config file",
         type=str,
     )
-    parser.add_argument("--local_rank", type=int, default=0)
+    parser.add_argument("--local_rank", type=int, default=0) # for cuda device rank
     parser.add_argument(
         "--skip-test",
         dest="skip_test",
@@ -131,8 +131,8 @@ def main():
 
     args = parser.parse_args()
 
-    num_gpus = int(os.environ["WORLD_SIZE"]) if "WORLD_SIZE" in os.environ else 1
-    args.distributed = num_gpus > 1
+    num_gpus = int(os.environ["WORLD_SIZE"]) if "WORLD_SIZE" in os.environ else 1  # gpu num
+    args.distributed = num_gpus > 1  # multi gpu for distributed
 
     if args.distributed:
         torch.cuda.set_device(args.local_rank)

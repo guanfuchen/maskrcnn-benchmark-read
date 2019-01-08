@@ -4,6 +4,7 @@ import os
 import sys
 
 
+# setup logger
 def setup_logger(name, save_dir, distributed_rank):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)

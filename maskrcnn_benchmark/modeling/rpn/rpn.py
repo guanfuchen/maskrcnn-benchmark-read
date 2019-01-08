@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 import torch
 import torch.nn.functional as F
@@ -50,6 +51,8 @@ class RPNModule(torch.nn.Module):
     """
     Module for RPN computation. Takes feature maps from the backbone and RPN
     proposals and losses. Works for both FPN and non-FPN.
+
+    RPN计算模块
     """
 
     def __init__(self, cfg):
@@ -57,7 +60,7 @@ class RPNModule(torch.nn.Module):
 
         self.cfg = cfg.clone()
 
-        anchor_generator = make_anchor_generator(cfg)
+        anchor_generator = make_anchor_generator(cfg)  # anchor generator
 
         in_channels = cfg.MODEL.BACKBONE.OUT_CHANNELS
         rpn_head = registry.RPN_HEADS[cfg.MODEL.RPN.RPN_HEAD]

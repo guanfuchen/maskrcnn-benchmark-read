@@ -21,6 +21,7 @@ def get_world_size():
 
 
 def get_rank():
+    # get device rank
     if not torch.distributed.is_available():
         return 0
     if not torch.distributed.is_initialized():
